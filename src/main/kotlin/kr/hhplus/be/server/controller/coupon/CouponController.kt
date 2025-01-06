@@ -1,7 +1,16 @@
 package kr.hhplus.be.server.controller.coupon
 
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.ArraySchema
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
+import kr.hhplus.be.server.controller.common.ApiErrorResponse
 import kr.hhplus.be.server.controller.coupon.dto.CouponRequest
 import kr.hhplus.be.server.controller.coupon.dto.CouponResponse
+import kr.hhplus.be.server.controller.user.dto.UserResponse
 import org.springframework.context.annotation.Description
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -9,16 +18,58 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("v1/coupon")
+@Tag(name = "쿠폰 API")
 class CouponController {
 
+    @Operation(summary = "쿠폰 생성 API")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200", description = "조회 생성 성공", content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = UserResponse::class))
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400", description = "쿠폰 생성 실패", content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = ApiErrorResponse::class))
+                    )
+                ]
+            )
+        ]
+    )
     @PostMapping
-    @Description(value = "쿠폰 생성")
     fun coupon(@RequestBody request: CouponRequest): ResponseEntity<CouponResponse> {
         return ResponseEntity(HttpStatus.CREATED)
     }
 
+
+    @Operation(summary = "유저 쿠폰 발급 성공")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200", description = "쿠폰 발급 성공", content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = CouponResponse::class))
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400", description = "쿠폰 발급 실패", content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = CouponResponse::class))
+                    )
+                ]
+            )
+        ]
+    )
     @PostMapping("{couponId}/issue/{userId}")
-    @Description(value = "유저 쿠폰 발급")
     fun issueCoupon(
         @PathVariable couponId: Long,
         @PathVariable userId: Long
