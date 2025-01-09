@@ -19,8 +19,7 @@ spring:
     generate-ddl: false
     show-sql: false
     hibernate:
-      ddl-auto: create
-      # dialect: org.hibernate.dialect.MySQLDialect
+      ddl-auto: update # none, create, create-drop, update, validate
     properties:
       hibernate.timezone.default_storage: NORMALIZE_UTC
       hibernate.jdbc.time_zone: UTC
