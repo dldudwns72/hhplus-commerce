@@ -13,6 +13,6 @@ services:
       - "3307:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-      # - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 volumes:
   mysql-data: # named volume이 컨테이너에서 사용될 수 있게 했습니다.
