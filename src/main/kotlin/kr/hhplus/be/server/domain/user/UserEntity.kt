@@ -1,10 +1,22 @@
 package kr.hhplus.be.server.domain.user
 
-import kr.hhplus.be.server.controller.user.dto.BalanceRequest
+import jakarta.persistence.*
 import kr.hhplus.be.server.domain.common.BaseEntity
 
+@Entity
+@Table(name = "users")
 class UserEntity(
-    val name: String,
-    val balance: Int,
+    @Column(name = "name", nullable = false)
+    var name: String,
+    @Column(name = "balance", nullable = false)
+    var balance: Long
 ) : BaseEntity() {
+
+    fun addPoint(point: Long) {
+        balance += point
+    }
+
+    fun usePoint(point: Long) {
+        balance -= point
+    }
 }

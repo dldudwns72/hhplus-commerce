@@ -7,6 +7,12 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.7"
 }
 
+allOpen {
+	annotation("jakarta.persistence.Entity")
+	annotation("jakarta.persistence.MappedSuperclass")
+	annotation("jakarta.persistence.Embeddable")
+}
+
 fun getGitHash(): String {
 	return providers.exec {
 		commandLine("git", "rev-parse", "--short", "HEAD")
@@ -48,6 +54,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+
+	// Swagger
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 
     // DB
 	runtimeOnly("com.mysql:mysql-connector-j")
