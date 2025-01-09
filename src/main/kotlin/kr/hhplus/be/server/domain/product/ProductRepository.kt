@@ -2,10 +2,16 @@ package kr.hhplus.be.server.domain.product
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import java.time.LocalDateTime
 
 interface ProductRepository {
-    fun findProduct(id: Long): ProductResult?
     fun findProductById(id: Long): ProductEntity?
-    fun findProducts(pageable: Pageable): Page<ProductResult>
-    fun findPopularProduct(): List<ProductEntity>
+    fun findProductWithLock(id: Long): ProductEntity?
+    fun findAllByIds(ids: List<Long>): List<ProductEntity>
+    fun findAll(pageable: Pageable): Page<ProductEntity>
+    fun findPopularProduct(
+        startDate: LocalDateTime,
+        endDate: LocalDateTime,
+        pageable: Pageable
+    ): Page<PopularProductResult>
 }

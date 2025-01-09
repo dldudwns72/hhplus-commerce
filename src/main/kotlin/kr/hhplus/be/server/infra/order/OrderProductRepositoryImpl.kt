@@ -9,11 +9,7 @@ import org.springframework.stereotype.Repository
 class OrderProductRepositoryImpl(
     private val orderProductJpaRepository: OrderProductJpaRepository
 ) : OrderProductRepository {
-    override fun saveAll(orderProducts: List<OrderProductEntity>) {
-        orderProductJpaRepository.saveAll(orderProducts)
-    }
-
-    override fun findByUserId(userId: Long): List<OrderProductResult> {
-        return orderProductJpaRepository.findOrderProductEntityByUserId(userId)
+    override fun saveAll(orderProducts: List<OrderProductEntity>): List<OrderProductEntity> {
+        return orderProductJpaRepository.saveAll(orderProducts)
     }
 }

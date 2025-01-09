@@ -7,9 +7,11 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
-import kr.hhplus.be.server.application.order.OrderService
-import kr.hhplus.be.server.controller.order.dto.OrderRequest
-import kr.hhplus.be.server.controller.order.dto.OrderResponse
+import kr.hhplus.be.server.application.order.OrderFacade
+import kr.hhplus.be.server.controller.common.SingleResponse
+import kr.hhplus.be.server.controller.order.dto.request.OrderRequest
+import kr.hhplus.be.server.controller.order.dto.response.OrderResponse
+import kr.hhplus.be.server.controller.order.dto.response.toResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -17,7 +19,9 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/order")
 @Tag(name = "주문 API")
-class OrderController(private val orderService: OrderService) {
+class OrderController(
+    private val orderFacade: OrderFacade
+) : OrderSpecificationApi {
 
     @Operation(summary = "상품 주문 API")
     @ApiResponses(
@@ -33,10 +37,15 @@ class OrderController(private val orderService: OrderService) {
         ]
     )
     @PostMapping("/user/{userId}")
-    fun postOrder(
+    override fun postOrder(
         @PathVariable userId: Long,
-        @RequestBody orderRequests: List<OrderRequest>
-    ): ResponseEntity<OrderResponse> {
-        return ResponseEntity(orderService.order(userId, orderRequests), HttpStatus.OK)
+        @RequestBody orderRequest: OrderRequest
+    ): ResponseEntity<SingleResponse<OrderResponse>> {
+        return ResponseEntity(
+            SingleResponse.execute {
+                orderFacade.order(userId, orderRequest).toResponse()
+            }, HttpStatus.OK
+        )
     }
+
 }

@@ -10,6 +10,7 @@ class UserEntity(
     var name: String,
     @Column(name = "balance", nullable = false)
     var balance: Long
+    // 연관관계 설정
 ) : BaseEntity() {
 
     fun addPoint(point: Long) {

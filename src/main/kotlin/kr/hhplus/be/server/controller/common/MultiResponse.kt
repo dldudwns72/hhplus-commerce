@@ -1,8 +1,13 @@
 package kr.hhplus.be.server.controller.common
 
-object MultiResponse {
+data class MultiResponse<T>(
+    val result: String = "SUCCESS", // Enum으로 관리?
+    val data: List<T> = listOf()
+) {
 
-    fun <T> execute(item: T) {
-        println("item $item")
+    companion object {
+        fun <T> execute(block: () -> List<T>): MultiResponse<T> {
+            return MultiResponse(data = block())
+        }
     }
 }

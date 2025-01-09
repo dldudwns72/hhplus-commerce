@@ -10,6 +10,13 @@ class CouponEntity(
     var name: String,
     @Column(name = "capacity", nullable = false)
     var capacity: Int,
+    @Enumerated(EnumType.STRING)
+    @Column(name = "discount_type", nullable = false)
+    val discountType: CouponDiscountType,
+    @Column(name = "discount_value", nullable = false)
+    val discountValue: Int,
+    @OneToMany(mappedBy = "coupon", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    var couponUsers: MutableList<CouponUserEntity> = mutableListOf(),
 ) : BaseEntity() {
 
     fun issue() {

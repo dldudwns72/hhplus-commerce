@@ -3,7 +3,6 @@ package kr.hhplus.be.server.infra.user
 import kr.hhplus.be.server.domain.user.UserEntity
 import kr.hhplus.be.server.domain.user.UserRepository
 import org.springframework.stereotype.Repository
-import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 @Repository
@@ -15,7 +14,7 @@ class UserRepositoryImpl(
         userJpaRepository.save(userEntity)
     }
 
-    override fun saveUserBalance2(userId: Long, totalBalance: Long) {
+    override fun updateUserBalance(userId: Long, totalBalance: Long) {
         userJpaRepository.saveUserBalance(userId, totalBalance)
     }
 
@@ -25,6 +24,10 @@ class UserRepositoryImpl(
 
     override fun findById(id: Long): UserEntity? {
         return userJpaRepository.findById(id).getOrNull()
+    }
+
+    override fun save(user: UserEntity) {
+        userJpaRepository.save(user)
     }
 
 }

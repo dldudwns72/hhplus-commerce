@@ -15,8 +15,7 @@ class OrderRepositoryImpl(
     }
 
     override fun saveOrder(orderEntity: OrderEntity): OrderEntity {
-        orderJpaRepository.save(orderEntity)
-        return orderEntity
+        return orderJpaRepository.save(orderEntity)
     }
 
     override fun updateOrderStatus(id: Long, status: OrderStatus) {

@@ -8,23 +8,21 @@ import kr.hhplus.be.server.domain.product.ProductEntity
 @Table(name = "order_product")
 class OrderProductEntity(
 
-    @Column(name = "count", nullable = false)
-    val count: Int,
+    // 2개 row 생성?
+    @Column(name = "quantity", nullable = false)
+    val quantity: Int,
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "order_id", nullable = false)
-//    var order: OrderEntity,
+    // 1개의 주문에 order_product 가 N개 생성될 수 있으니깐 1 order: N order_product -> order_product:Many order:One => ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
+    var order: OrderEntity,
 
-    @Column(name = "order_id", nullable = false)
-    var orderId: Long = 0,
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "product_id", nullable = false)
-//    var product: ProductEntity,
-
-    @Column(name = "product_id", nullable = false)
-    var productId: Long = 0,
+    // 1개의 상품에 order_product 가 N개 생성될 수 있으니깐 1 product: N order_product -> order_product:Many product:One => ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    var product: ProductEntity
 ) : BaseEntity() {
 
 
 }
+

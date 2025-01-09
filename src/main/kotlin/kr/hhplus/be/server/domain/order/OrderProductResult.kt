@@ -7,3 +7,14 @@ data class OrderProductResult(
     val productPrice: Long
 ) {
 }
+
+fun List<OrderProductEntity>.toResult(): List<OrderProductResult> {
+    return this.map {
+        OrderProductResult(
+            orderId = it.order.id,
+            productId = it.product.id,
+            productName = it.product.name,
+            productPrice = it.product.price
+        )
+    }
+}

@@ -2,7 +2,6 @@ package kr.hhplus.be.server.infra.product
 
 import kr.hhplus.be.server.domain.product.ProductInventoryEntity
 import kr.hhplus.be.server.domain.product.ProductInventoryRepository
-import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 

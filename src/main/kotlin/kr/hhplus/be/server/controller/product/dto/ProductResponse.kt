@@ -1,7 +1,6 @@
 package kr.hhplus.be.server.controller.product.dto
 
-import kr.hhplus.be.server.domain.product.ProductResult
-import kr.hhplus.be.server.infra.product.ProductQuery
+import kr.hhplus.be.server.domain.product.ProductEntity
 
 data class ProductResponse(
     val id: Long,
@@ -11,10 +10,10 @@ data class ProductResponse(
 ) {
 }
 
-fun ProductResult.toProductResponse () =
+fun ProductEntity.toProductResponse() =
     ProductResponse(
         id = id,
         name = name,
         price = price,
-        inventory = inventory
+        inventory = productInventory?.inventory ?: 0
     )
