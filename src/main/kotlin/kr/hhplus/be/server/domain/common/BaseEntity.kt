@@ -2,6 +2,7 @@ package kr.hhplus.be.server.domain.common
 
 import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedBy
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
@@ -16,9 +17,10 @@ abstract class BaseEntity {
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now()
+    var createdAt: LocalDateTime = LocalDateTime.now()
 
-    @LastModifiedDate
+    // @LastModifiedDate
+    @LastModifiedBy
     @Column(name = "updated_at", nullable = false)
-    val updatedAt: LocalDateTime = LocalDateTime.now()
+    var updatedAt: LocalDateTime = LocalDateTime.now()
 }
