@@ -8,19 +8,24 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import kr.hhplus.be.server.application.product.ProductService
+import kr.hhplus.be.server.controller.common.ErrorResponse
 import kr.hhplus.be.server.controller.product.dto.PopularProductResponse
 import kr.hhplus.be.server.controller.product.dto.ProductResponse
 import kr.hhplus.be.server.controller.user.dto.UserResponse
 import org.springframework.context.annotation.Description
+import org.springframework.data.domain.Page
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.awt.print.Pageable
 import java.time.LocalDate
 
 @RestController
 @RequestMapping("v1/product/")
 @Tag(name = "상품 API")
 class ProductController(
+    private val productService: ProductService,
 ) {
 
     @Operation(summary = "상품 목록 조회 API")
@@ -37,13 +42,14 @@ class ProductController(
                 ]
             )
         ],
-        )
+    )
     @GetMapping
     fun getProducts(
         @RequestParam(value = "page", defaultValue = "0") page: Int,
         @RequestParam(value = "size", defaultValue = "20") size: Int,
-    ): ResponseEntity<List<ProductResponse>> {
-        return ResponseEntity(HttpStatus.OK)
+    ): ResponseEntity<Page<ProductResponse>> {
+        val products = productService.getProducts(page, size)
+        return ResponseEntity(products, HttpStatus.OK)
     }
 
     @Operation(summary = "상품 상세 조회 API")
@@ -65,6 +71,7 @@ class ProductController(
     fun getProduct(
         @PathVariable productId: Long,
     ): ResponseEntity<ProductResponse> {
+        productService.getProduct(productId)
         return ResponseEntity(HttpStatus.OK)
     }
 
@@ -93,6 +100,7 @@ class ProductController(
         @RequestParam(value = "page", defaultValue = "0") page: Int,
         @RequestParam(value = "size", defaultValue = "5") size: Int
     ): ResponseEntity<List<PopularProductResponse>> {
+        productService.getPopularProduct(startDate, endDate, page, size)
         return ResponseEntity(listOf(), HttpStatus.OK)
     }
 }
