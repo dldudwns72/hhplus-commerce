@@ -1,4 +1,6 @@
 package kr.hhplus.be.server.controller.coupon.dto
 
-class CouponRequest {
+data class CouponRequest(
+    val couponId: Long
+) {
 }

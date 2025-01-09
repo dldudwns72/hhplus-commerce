@@ -1,63 +1,107 @@
 package kr.hhplus.be.server.controller.user
 
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.ArraySchema
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import kr.hhplus.be.server.application.user.UserService
-import kr.hhplus.be.server.controller.coupon.dto.CouponRequest
-import kr.hhplus.be.server.controller.coupon.dto.CouponResponse
-import kr.hhplus.be.server.controller.order.dto.OrderResponse
 import kr.hhplus.be.server.controller.user.dto.*
-import org.springframework.context.annotation.Description
+import kr.hhplus.be.server.domain.order.OrderProductResult
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("v1/user")
+@RequestMapping("/api/v1/user")
+@Tag(name = "유저 관련 API")
 class UserController(
+    private val userService: UserService
 ) {
 
+    @Operation(summary = "유저 잔액 충전 API")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200", description = "충전 성공", content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = UserResponse::class))
+                    )
+                ]
+            )
+        ]
+    )
     @PostMapping("/{userId}/balance")
-    @Description("유저 잔액 충전")
     fun chargeBalance(
-        @PathVariable userId: Long?,
+        @PathVariable userId: Long,
         @RequestBody request: BalanceRequest
     ): ResponseEntity<UserResponse> {
-        if (request.point < 0) {
-            throw Exception("충전 금액은 0 이상 이여야 합니다.")
-        }
-
-        return ResponseEntity(HttpStatus.OK)
+        return ResponseEntity(
+            userService.chargePoint(userId, request.point),
+            HttpStatus.OK
+        )
     }
 
-    @GetMapping("/{userId}/balance")
-    @Description("유저 잔액 조회")
+
+    @Operation(summary = "유저 잔액 조회 API")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200", description = "조회 성공", content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = UserResponse::class))
+                    )
+                ]
+            )
+        ]
+    )
+    @GetMapping("/{userId}")
     fun gatUserBalance(
         @PathVariable userId: Long
-    ): ResponseEntity<UserBalanceResponse> {
-        val response = UserBalanceResponse(userId = userId, name = "잔액", balance = 100)
-        return ResponseEntity(HttpStatus.OK)
+    ): ResponseEntity<UserResponse> {
+        return ResponseEntity(userService.getUser(userId), HttpStatus.OK)
     }
 
+    @Operation(summary = "주문 목록 조회")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200", description = "주문 조회 성공", content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = UserOrderResponse::class))
+                    )
+                ]
+            )
+        ]
+    )
     @GetMapping("{userId}/orders")
-    @Description("유저 주문 목록 조회")
-    fun getOrders(@PathVariable userId: Long): ResponseEntity<List<UserOrderResponse>> {
-        val response = listOf(
-            UserOrderResponse(userId = userId, orderId = 1),
-            UserOrderResponse(userId = userId, orderId = 2)
-        )
-        return ResponseEntity(response, HttpStatus.OK)
+    fun getOrders(@PathVariable userId: Long): ResponseEntity<List<OrderProductResult>> {
+        return ResponseEntity(userService.getOrders(userId), HttpStatus.OK)
     }
 
-    @PostMapping("{userId}/coupons")
-    @Description(value = "유저 쿠폰 조회")
+    @Operation(summary = "발급된 유저 쿠폰 조회")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200", description = "쿠폰 조회 성공", content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = UserCouponResponse::class))
+                    )
+                ]
+            )
+        ]
+    )
+    @GetMapping("{userId}/coupons")
     fun getCoupon(
-        @RequestBody request: CouponRequest,
         @PathVariable userId: Long
-    ): ResponseEntity<UserCouponResponse> {
-        val response = listOf(
-            UserCouponResponse(id = userId, couponId = 1),
-            UserCouponResponse(id = userId, couponId = 2)
-        )
-        return ResponseEntity(HttpStatus.CREATED)
+    ): ResponseEntity<List<UserCouponResponse>> {
+        return ResponseEntity(userService.getCoupons(userId), HttpStatus.CREATED)
     }
 
 }

@@ -1,17 +1,18 @@
-version: '3'
+version: '3.8'
 services:
-  mysql:
+  mysql-db:
     image: mysql:8.0
-    ports:
-      - "3306:3306"
+    container_name: mysql
+    restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=application
-      - MYSQL_PASSWORD=application
-      - MYSQL_DATABASE=hhplus
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: e-commerce
+      MYSQL_USER: hhplus
+      MYSQL_PASSWORD: 1234qwer
+    ports:
+      - "3307:3306"
     volumes:
-      - ./data/mysql/:/var/lib/mysql
-
-networks:
-  default:
-    driver: bridge
+      - mysql-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+volumes:
+  mysql-data: # named volume이 컨테이너에서 사용될 수 있게 했습니다.
