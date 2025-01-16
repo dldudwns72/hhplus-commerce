@@ -9,8 +9,6 @@ import kr.hhplus.be.server.domain.order.OrderProductEntity
 class ProductEntity(
     val name: String,
     val price: Long,
-//    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-//    var orderProducts: MutableList<OrderProductEntity> = mutableListOf(),
     @OneToOne(mappedBy = "product", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     var productInventory: ProductInventoryEntity
 ) : BaseEntity() {

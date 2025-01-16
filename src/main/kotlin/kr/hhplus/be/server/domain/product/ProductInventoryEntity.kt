@@ -1,8 +1,7 @@
 package kr.hhplus.be.server.domain.product
 
 import jakarta.persistence.*
-import kr.hhplus.be.server.controller.common.ProductException
-import kr.hhplus.be.server.domain.common.BaseEntity
+import kr.hhplus.be.server.controller.common.exception.ProductException
 
 @Entity
 @Table(name = "product_inventory")

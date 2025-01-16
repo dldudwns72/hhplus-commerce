@@ -3,7 +3,6 @@ package kr.hhplus.be.server.application.order
 import kr.hhplus.be.server.application.coupon.CouponService
 import kr.hhplus.be.server.controller.order.dto.request.OrderRequest
 import kr.hhplus.be.server.domain.coupon.CouponEntity
-import kr.hhplus.be.server.domain.order.OrderEntity
 import kr.hhplus.be.server.domain.order.OrderResult
 import kr.hhplus.be.server.domain.order.OrderService
 import kr.hhplus.be.server.domain.order.toResult
@@ -32,9 +31,8 @@ class OrderFacade(
             couponService.getCoupon(couponId)
         }
 
-        // 주문할 상품 조회
-        val products: List<ProductEntity> = request.orderProducts.map {
-            productService.getProductWithLock(it.productId)
+        val products: List<Pair<ProductEntity, Int>> = request.orderProducts.map {
+            productService.getProductWithLock(it.productId) to it.quantity
         }
 
         val order = orderService.order(user, coupon, products)
