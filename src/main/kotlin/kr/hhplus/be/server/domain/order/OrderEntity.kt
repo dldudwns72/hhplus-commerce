@@ -26,6 +26,11 @@ class OrderEntity(
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
     var orderProducts: MutableList<OrderProductEntity> = mutableListOf()
 ) : BaseEntity() {
+    fun addOrderProduct(orderProduct: OrderProductEntity) {
+        this.orderProducts.add(orderProduct) // 컬렉션에 추가
+        orderProduct.order = this // 양방향 관계 설정
+    }
+
     fun complete(totalAmount: Long) {
         this.totalAmount = totalAmount
         status = OrderStatus.COMPLETED

@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.domain.product
 
-import kr.hhplus.be.server.controller.common.ProductException
+import kr.hhplus.be.server.controller.common.exception.ProductException
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -8,7 +8,6 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 

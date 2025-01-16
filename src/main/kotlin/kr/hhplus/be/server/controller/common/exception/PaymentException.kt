@@ -1,6 +1,6 @@
-package kr.hhplus.be.server.controller.common
+package kr.hhplus.be.server.controller.common.exception
 
-class ProductException(
+class PaymentException(
     override val message: String,
     cause: Throwable? = null,
 ) : RuntimeException(

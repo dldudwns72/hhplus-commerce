@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.controller.common
+package kr.hhplus.be.server.controller.common.exception
 
 data class ErrorResponse(
     val errorCode: String,

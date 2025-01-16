@@ -9,28 +9,21 @@ import org.springframework.stereotype.Service
 
 @Service
 class OrderService(
-    private val orderRepository: OrderRepository,
-    private val orderProductRepository: OrderProductRepository
+    private val orderRepository: OrderRepository
 ) {
 
     @Transactional
-    fun order(user: UserEntity, coupon: CouponEntity?, products: List<ProductEntity>): OrderEntity {
+    fun order(user: UserEntity, coupon: CouponEntity?, products: List<Pair<ProductEntity, Int>>): OrderEntity {
         val order = coupon?.let { OrderEntity(user, coupon) } ?: run { OrderEntity(user) }
         val orderProducts = products.map { product ->
-            product.productInventory.decreaseInventoryCount()
+            product.first.productInventory.decreaseInventoryCount()
             OrderProductEntity(
-                quantity = products.associateBy { it.id }.size,
+                quantity = product.second,
                 order = order,
-                product = product
+                product = product.first
             )
         }
-        order.orderProducts.addAll(orderProducts)
-        orderRepository.saveOrder(order)
-        return order
-    }
-
-    fun success(order: OrderEntity): OrderEntity {
-        order.status = OrderStatus.COMPLETED
-        return order
+        orderProducts.forEach { order.addOrderProduct(it) }
+        return orderRepository.saveOrder(order)
     }
 }
