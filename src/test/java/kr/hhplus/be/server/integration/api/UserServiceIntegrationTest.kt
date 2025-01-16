@@ -24,7 +24,7 @@ class UserServiceIntegrationTest(
     @BeforeEach
     fun setUp() {
         // 테스트 데이터 초기화
-        userRepository.save(UserEntity(name = "John Doe", balance = 100L))
+        userRepository.save(UserEntity(name = "LEE", balance = 100L))
     }
 
     @Test

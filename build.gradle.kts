@@ -68,6 +68,9 @@ dependencies {
 	testImplementation("org.testcontainers:mysql")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation(kotlin("test"))
+
+	// Logger
+	implementation("ch.qos.logback:logback-classic:1.4.11")
 }
 
 tasks.withType<Test> {
