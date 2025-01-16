@@ -2,9 +2,11 @@ package kr.hhplus.be.server.config.interceptor
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import kr.hhplus.be.server.domain.user.UserEntity
 import kr.hhplus.be.server.domain.user.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
 
 @Component
