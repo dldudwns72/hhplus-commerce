@@ -6,6 +6,9 @@ import kr.hhplus.be.server.domain.common.BaseEntity
 @Entity
 @Table(name = "users")
 class UserEntity(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = 0L,
     @Column(name = "name", nullable = false)
     var name: String,
     @Column(name = "balance", nullable = false)

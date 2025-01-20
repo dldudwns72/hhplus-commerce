@@ -10,7 +10,7 @@ class PaymentService(
 ) {
 
     fun pay(order: OrderEntity, amount: Long): PaymentEntity {
-        return paymentRepository.save(PaymentEntity(order, amount))
+        return paymentRepository.save(PaymentEntity(order = order, amount = amount))
     }
 
     fun isSuccess(payment: PaymentEntity): Boolean {

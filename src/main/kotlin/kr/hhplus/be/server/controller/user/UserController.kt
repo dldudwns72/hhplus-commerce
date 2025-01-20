@@ -38,6 +38,5 @@ class UserController(
             }, HttpStatus.OK
         )
     }
-
 }
 

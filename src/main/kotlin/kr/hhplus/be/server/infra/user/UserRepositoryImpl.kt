@@ -26,8 +26,8 @@ class UserRepositoryImpl(
         return userJpaRepository.findById(id).getOrNull()
     }
 
-    override fun save(user: UserEntity) {
-        userJpaRepository.save(user)
+    override fun save(user: UserEntity): UserEntity {
+        return userJpaRepository.save(user)
     }
 
 }

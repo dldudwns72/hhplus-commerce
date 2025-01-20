@@ -1,15 +1,9 @@
 package kr.hhplus.be.server.controller.coupon
 
-import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.media.ArraySchema
-import io.swagger.v3.oas.annotations.media.Content
-import io.swagger.v3.oas.annotations.media.Schema
-import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.responses.ApiResponses
-import kr.hhplus.be.server.domain.coupon.CouponUserService
 import kr.hhplus.be.server.controller.common.MultiResponse
 import kr.hhplus.be.server.controller.user.dto.response.CouponUserResponse
 import kr.hhplus.be.server.controller.user.dto.response.toResponse
+import kr.hhplus.be.server.domain.coupon.CouponUserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

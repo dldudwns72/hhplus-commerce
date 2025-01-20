@@ -7,7 +7,9 @@ import kr.hhplus.be.server.domain.product.ProductEntity
 @Entity
 @Table(name = "order_product")
 class OrderProductEntity(
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = 0L,
     // 2개 row 생성?
     @Column(name = "quantity", nullable = false)
     val quantity: Int,

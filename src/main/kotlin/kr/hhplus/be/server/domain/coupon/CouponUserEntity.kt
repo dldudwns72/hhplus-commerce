@@ -8,20 +8,24 @@ import kr.hhplus.be.server.domain.user.UserEntity
 @Entity
 @Table(name = "coupon_user")
 class CouponUserEntity(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = 0L,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     val user: UserEntity,
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = true)
-    var order: OrderEntity? = null,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon_id", nullable = false)
     var coupon: CouponEntity,
     var isUsed: Boolean = false,
 ) : BaseEntity() {
-    fun use(order: OrderEntity) {
+
+    fun use() {
         this.isUsed = true
-        this.order = order
+    }
+
+    fun usedCheck() {
+        if(isUsed) throw IllegalArgumentException("이미 사용된 쿠폰입니다. couponId: ${coupon.id}")
     }
 }
 

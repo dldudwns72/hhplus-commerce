@@ -97,7 +97,20 @@ CREATE TABLE IF NOT EXISTS `orders`
   COLLATE = utf8mb4_0900_ai_ci;
 
 
-CREATE TABLE `order_product`
+CREATE TABLE IF NOT EXISTS `order_product`
+(
+    `id`         bigint      NOT NULL AUTO_INCREMENT,
+    `created_at` datetime(6) NOT NULL,
+    `updated_at` datetime(6) NOT NULL,
+    `quantity`   int         NOT NULL,
+    `order_id`   bigint      NOT NULL,
+    `product_id` bigint      NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS `payment`
 (
     `id`         bigint      NOT NULL AUTO_INCREMENT,
     `created_at` datetime(6) NOT NULL,

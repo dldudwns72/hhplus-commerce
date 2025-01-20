@@ -6,5 +6,5 @@ interface UserRepository {
     fun updateUserBalance(userId: Long, totalBalance: Long)
     fun findBalanceById(id: Long): Int
     fun findById(id: Long): UserEntity?
-    fun save(user: UserEntity)
+    fun save(user: UserEntity): UserEntity
 }
