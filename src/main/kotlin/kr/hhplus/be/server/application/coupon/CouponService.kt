@@ -10,10 +10,18 @@ import org.springframework.stereotype.Service
 @Service
 class CouponService(
     private val couponRepository: CouponRepository,
+    private val couponUserRepository: CouponUserRepository,
 ) {
 
     fun getCoupon(couponId: Long): CouponEntity {
-        return couponRepository.findById(couponId)
+        return couponRepository.findCouponWithLock(couponId)
             ?: throw IllegalArgumentException("coupon with ID $couponId not found")
+    }
+
+    // 이것도 CouponUser 서비스롤 분리해야 할까?
+    fun getCouponsUser(couponUserId: Long): CouponUserEntity? {
+        val couponUser = couponUserRepository.findCouponUserById(couponUserId)
+            ?: throw IllegalArgumentException("coupon user with ID $couponUserId not found")
+        return couponUser.also { it.usedCheck() }
     }
 }

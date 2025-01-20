@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import kr.hhplus.be.server.controller.common.SingleResponse
 import kr.hhplus.be.server.controller.coupon.dto.response.CouponResponse
+import kr.hhplus.be.server.controller.user.dto.response.CouponUserResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 
@@ -31,5 +32,5 @@ interface CouponSpecificationApi {
     fun issueCoupon(
         @PathVariable couponId: Long,
         @PathVariable userId: Long
-    ): ResponseEntity<SingleResponse<IssuedCouponResponse>>
+    ): ResponseEntity<SingleResponse<CouponUserResponse>>
 }

@@ -8,11 +8,14 @@ import kr.hhplus.be.server.domain.user.UserEntity
 @Entity
 @Table(name = "orders")
 class OrderEntity(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = 0L,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     val user: UserEntity,
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon_id", nullable = true)
     val coupon: CouponEntity? = null,
 
@@ -26,6 +29,7 @@ class OrderEntity(
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
     var orderProducts: MutableList<OrderProductEntity> = mutableListOf()
 ) : BaseEntity() {
+
     fun complete(totalAmount: Long) {
         this.totalAmount = totalAmount
         status = OrderStatus.COMPLETED

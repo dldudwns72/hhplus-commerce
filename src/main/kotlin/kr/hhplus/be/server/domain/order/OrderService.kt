@@ -3,34 +3,28 @@ package kr.hhplus.be.server.domain.order
 import jakarta.transaction.Transactional
 import kr.hhplus.be.server.application.order.OrderResult
 import kr.hhplus.be.server.domain.coupon.CouponEntity
+import kr.hhplus.be.server.domain.coupon.CouponUserEntity
 import kr.hhplus.be.server.domain.product.ProductEntity
 import kr.hhplus.be.server.domain.user.UserEntity
 import org.springframework.stereotype.Service
 
 @Service
 class OrderService(
-    private val orderRepository: OrderRepository,
-    private val orderProductRepository: OrderProductRepository
+    private val orderRepository: OrderRepository
 ) {
 
     @Transactional
-    fun order(user: UserEntity, coupon: CouponEntity?, products: List<ProductEntity>): OrderEntity {
-        val order = coupon?.let { OrderEntity(user, coupon) } ?: run { OrderEntity(user) }
+    fun order(user: UserEntity, couponUser: CouponUserEntity?, products: List<Pair<ProductEntity, Int>>): OrderEntity {
+        val order = couponUser?.let { OrderEntity(user = user, coupon = it.coupon) } ?: run { OrderEntity(user = user) }
         val orderProducts = products.map { product ->
-            product.productInventory.decreaseInventoryCount()
+            product.first.productInventory.decreaseInventoryCount()
             OrderProductEntity(
-                quantity = products.associateBy { it.id }.size,
+                quantity = product.second,
                 order = order,
-                product = product
+                product = product.first
             )
-        }
-        order.orderProducts.addAll(orderProducts)
-        orderRepository.saveOrder(order)
-        return order
-    }
-
-    fun success(order: OrderEntity): OrderEntity {
-        order.status = OrderStatus.COMPLETED
-        return order
+        }.toMutableList()
+        order.orderProducts = orderProducts
+        return orderRepository.saveOrder(order)
     }
 }

@@ -27,6 +27,7 @@ class ProductTest {
     fun getProduct() {
         val productId = 1L
         val mockProduct = ProductEntity(
+            id = productId,
             "product1",
             price = 100,
             productInventory = ProductInventoryEntity(
@@ -44,6 +45,7 @@ class ProductTest {
     fun decreaseStockProduct() {
         val productId = 1L
         val mockProduct = ProductEntity(
+            id = productId,
             "product1",
             price = 100,
             productInventory = ProductInventoryEntity(
@@ -63,6 +65,7 @@ class ProductTest {
     fun emptyInventory() {
         val productId = 1L
         val mockProduct = ProductEntity(
+            id = productId,
             "product1",
             price = 100,
             productInventory = ProductInventoryEntity(
@@ -74,6 +77,13 @@ class ProductTest {
         assertThrows<ProductException> {
             productService.decreaseStock(productId)
         }
+    }
+
+
+    @Test
+    @DisplayName("인기 상품 조회 성공")
+    fun getPopularProduct() {
+
     }
 
 

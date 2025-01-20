@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable
 @Tag(name = "쿠폰 유저 API")
 interface CouponUserSpecificationApi {
 
-    @Operation(summary = "유저 쿠폰 발급 API")
+    @Operation(summary = "유저가 발급한 쿠폰 조회 API")
     @ApiResponses(
         value = [
             ApiResponse(

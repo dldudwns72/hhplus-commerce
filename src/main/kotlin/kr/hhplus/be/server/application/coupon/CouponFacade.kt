@@ -1,9 +1,8 @@
 package kr.hhplus.be.server.application.coupon
 
-import kr.hhplus.be.server.domain.user.UserService
-import kr.hhplus.be.server.controller.coupon.IssuedCouponResponse
+import jakarta.transaction.Transactional
 import kr.hhplus.be.server.domain.coupon.CouponUserService
-import kr.hhplus.be.server.domain.coupon.toIssuedCouponResponse
+import kr.hhplus.be.server.domain.user.UserService
 import org.springframework.stereotype.Service
 
 /**
@@ -12,14 +11,15 @@ import org.springframework.stereotype.Service
  */
 @Service
 class CouponFacade(
-    private val couponService: CouponService,
     private val userService: UserService,
+    private val couponService: CouponService,
     private val couponUserService: CouponUserService
 ) {
+    @Transactional
     fun issue(couponId: Long, userId: Long): CouponUserResult {
         val user = userService.getUserById(userId)
         val coupon  = couponService.getCoupon(couponId)
-        coupon.issue()
-        return couponUserService.create(user, coupon)
+        coupon.issue() // dirty-checking -> couponService.issue() 호출하고 transaction 단위를 service로 옮기는게 좋은가?
+        return couponUserService.create(user, coupon).toCouponUserResult()
     }
 }

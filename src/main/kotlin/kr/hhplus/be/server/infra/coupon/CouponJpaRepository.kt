@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query
 interface CouponJpaRepository : JpaRepository<CouponEntity, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
+    // @QueryHints(QueryHint(name = "javax.persistence.lock.timeout", value = "5000")) // 5초
     @Query("SELECT c FROM CouponEntity c WHERE c.id = :id")
     fun findCouponWithLock(id: Long): CouponEntity?
 

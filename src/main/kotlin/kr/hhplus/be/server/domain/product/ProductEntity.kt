@@ -7,6 +7,9 @@ import kr.hhplus.be.server.domain.order.OrderProductEntity
 @Entity
 @Table(name = "product")
 class ProductEntity(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = 0L,
     val name: String,
     val price: Long,
 //    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
@@ -15,7 +18,7 @@ class ProductEntity(
     var productInventory: ProductInventoryEntity
 ) : BaseEntity() {
 
-    init {
-        productInventory.product = this // 양방향 관계 설정
-    }
+//    init {
+//        productInventory.product = this // 양방향 관계 설정
+//    }
 }
