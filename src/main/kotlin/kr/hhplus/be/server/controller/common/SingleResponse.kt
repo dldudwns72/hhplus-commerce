@@ -10,5 +10,7 @@ data class SingleResponse<T>(
         fun <T> execute(block: () -> T): SingleResponse<T> {
             return SingleResponse(data = block())
         }
+
+        fun error(message: String): SingleResponse<String> = SingleResponse(result = "ERROR", data = message)
     }
 }

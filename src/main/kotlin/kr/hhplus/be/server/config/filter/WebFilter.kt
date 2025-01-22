@@ -1,37 +1,43 @@
 package kr.hhplus.be.server.config.filter
 
-import jakarta.servlet.*
-import jakarta.servlet.FilterConfig
+import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
-import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Component
+import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.MDC
+import org.springframework.web.filter.OncePerRequestFilter
+import java.time.Instant
 
-@Component
-class WebFilter : Filter {
+class WebFilter : OncePerRequestFilter() {
 
-    val logger = LoggerFactory.getLogger("Filter Logger")
+    override fun doFilterInternal(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        filterChain: FilterChain
+    ) {
+        // 1. 요청에 대한 traceId 생성 (혹은 기존 traceId를 요청에서 추출)
+        val traceId = generateTraceId()
+        MDC.put("traceId", traceId)  // MDC에 traceId를 저장
 
-    // 애플리케이션 시작 최초 한 번만 실행되어 요청 처리 전 초기화 작업 수행
-    override fun init(filterConfig: FilterConfig?) {
-        super.init(filterConfig)
+        // 2. 요청 처리 시작 시간 기록 (doFilter 이전에 호출)
+        val startTime = Instant.now().toEpochMilli()
+
+        try {
+            // 3. 요청 처리 (다음 필터 또는 서블릿으로 이동)
+            filterChain.doFilter(request, response)
+        } finally {
+            // 4. 요청 처리 종료 시간 기록 (doFilter 이후에 호출)
+            val endTime = Instant.now().toEpochMilli()
+
+            // 5. 요청/응답 로깅 (doFilter 이후에 호출)
+            logger.info("Request URI: ${request.requestURI}, TraceId: $traceId, Start Time: $startTime, End Time: $endTime, Response Status: ${response.status}")
+
+            // 6. MDC에서 traceId 제거 (중요: 요청이 끝난 후에는 MDC에서 값을 제거해야 함)
+            MDC.remove("traceId")
+        }
     }
 
-    override fun doFilter(request: ServletRequest?, response: ServletResponse?, filterChain: FilterChain?) {
-        val startTime = System.currentTimeMillis()
-        val endTime = System.currentTimeMillis()
-        logger.info("Request processed in ${endTime - startTime} ms")
-        val httpRequest = request as HttpServletRequest
-        logger.info("Request Mapping - URI: ${request.requestURI}, Method: ${httpRequest.method}")
-        filterChain?.doFilter(request, response)  // 다음 필터 진행
+    private fun generateTraceId(): String {
+        return java.util.UUID.randomUUID().toString()
     }
 
-
-    // 애플리케이션 종료되거나 필터가 더이상 필요하지 않을 때 호출
-    override fun destroy() {
-        /**
-         * 1. 자원정리
-         * 2. 캐시정리
-         * 3. 기타 등등
-         */
-    }
 }

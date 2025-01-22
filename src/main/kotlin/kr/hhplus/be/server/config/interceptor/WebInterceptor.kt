@@ -1,36 +1,41 @@
 package kr.hhplus.be.server.config.interceptor
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import kr.hhplus.be.server.controller.common.SingleResponse
 import kr.hhplus.be.server.domain.user.UserEntity
 import kr.hhplus.be.server.domain.user.UserRepository
 import org.slf4j.LoggerFactory
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
-import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
 
 @Component
 class WebInterceptor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val objectMapper: ObjectMapper
 ) : HandlerInterceptor {
     val logger = LoggerFactory.getLogger("Interceptor Logger")
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        val requestUri = request.requestURI
-        logger.info("PreHandle: Request URI is $requestUri")
-
-        val userId = extractUserIdFromUri(requestUri)
-        userId?.also {
-            userRepository.findById(userId.toLong())
-                ?: throw IllegalArgumentException("User with ID $userId does not exist")
+        val userId: String? = request.getHeader("user-id")
+        val user: UserEntity? = userId?.let { id ->
+            userRepository.findById(id.toLong())
         }
-        return true // true를 반환하면 다음으로 진행, false를 반환하면 요청 중단
-    }
 
-    fun extractUserIdFromUri(uri: String): String? {
-        val regex = """/user/(\d+)""".toRegex()  // "/user/{userId}" 패턴에 맞는 정규식
-        val matchResult = regex.find(uri)
-        return matchResult?.groups?.get(1)?.value // {userId} 값 추출
+        // HandlerInterceptor 에서 요청이 컨트롤러로 전달되기 전에 실행되기 때문에 preHandler에서 throw를 진행해도 예외가 전달되지 않고 DispatcherServlet 의해 처리된다.
+        if (userId.isNullOrBlank() || user == null) {
+            response.status = HttpServletResponse.SC_UNAUTHORIZED
+            response.contentType = MediaType.APPLICATION_JSON_VALUE
+            response.characterEncoding = Charsets.UTF_8.name()
+
+            val errorResponse = SingleResponse.error("유저 정보가 올바르지 않습니다.")
+            // return false 처리 하지 않으면 response 만들어주는거 getWriter 두번 호출하게 된다.
+            response.writer.write(objectMapper.writeValueAsString(errorResponse))
+            return false // false를 반환하면 요청 중단
+        }
+        return true // true를 반환하면 다음으로 진행,
     }
 
     override fun postHandle(

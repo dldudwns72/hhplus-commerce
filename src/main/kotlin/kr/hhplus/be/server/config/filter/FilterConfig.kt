@@ -11,6 +11,7 @@ class FilterConfig {
     fun loggingFilter(): FilterRegistrationBean<WebFilter> {
         val registrationBean = FilterRegistrationBean<WebFilter>()
         registrationBean.filter = WebFilter()
+        // registrationBean.isEnabled = true
         registrationBean.addUrlPatterns("/api/*")
         return registrationBean
     }

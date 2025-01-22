@@ -34,7 +34,7 @@ interface OrderSpecificationApi {
         ]
     )
     fun postOrder(
-        @PathVariable userId: Long,
+        userId: Long,
         @RequestBody orderRequest: OrderRequest
     ): ResponseEntity<SingleResponse<OrderResponse>>
 }
