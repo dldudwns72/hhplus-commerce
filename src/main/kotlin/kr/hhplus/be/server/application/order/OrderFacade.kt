@@ -42,6 +42,7 @@ class OrderFacade(
         val totalAmount: Long = order.orderProducts.sumOf {
             it.product.price * it.quantity
         }
+        user.usePoint(totalAmount)
 
         val payment = paymentService.pay(order, totalAmount)
 

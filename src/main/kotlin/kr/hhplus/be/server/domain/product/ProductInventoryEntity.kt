@@ -3,6 +3,7 @@ package kr.hhplus.be.server.domain.product
 import jakarta.persistence.*
 import kr.hhplus.be.server.controller.common.ProductException
 import kr.hhplus.be.server.domain.common.BaseEntity
+import org.hibernate.annotations.ColumnDefault
 
 @Entity
 @Table(name = "product_inventory")
@@ -13,7 +14,10 @@ class ProductInventoryEntity(
     var inventory: Int,
     @OneToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     @JoinColumn(name = "product_id", nullable = false)
-    var product: ProductEntity? = null
+    var product: ProductEntity? = null,
+    @Version
+    @ColumnDefault("0")
+    var version: Int = 0
 ) {
 
     fun decreaseInventoryCount() {
