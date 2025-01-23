@@ -36,9 +36,9 @@ class OrderController(
             )
         ]
     )
-    @PostMapping("/user/{userId}")
+    @PostMapping("/user")
     override fun postOrder(
-        @PathVariable userId: Long,
+        @RequestHeader("user-id") userId: Long,
         @RequestBody orderRequest: OrderRequest
     ): ResponseEntity<SingleResponse<OrderResponse>> {
         return ResponseEntity(

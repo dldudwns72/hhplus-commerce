@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -17,10 +18,10 @@ class CouponController(
     private val couponFacade: CouponFacade
 ) : CouponSpecificationApi {
 
-    @PostMapping("/{couponId}/users/{userId}")
+    @PostMapping("/{couponId}/users")
     override fun issueCoupon(
         @PathVariable couponId: Long,
-        @PathVariable userId: Long
+        @RequestHeader("user-id") userId: Long
     ): ResponseEntity<SingleResponse<CouponUserResponse>> {
         return ResponseEntity(
             SingleResponse.execute {

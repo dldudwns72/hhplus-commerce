@@ -30,7 +30,7 @@ interface UserSpecificationApi {
         ]
     )
     fun chargeBalance(
-        @PathVariable userId: Long,
+        userId: Long,
         @RequestBody request: BalanceRequest
     ): ResponseEntity<SingleResponse<UserResponse>>
 
@@ -49,6 +49,6 @@ interface UserSpecificationApi {
         ]
     )
     fun gatUserBalance(
-        @PathVariable userId: Long
+        userId: Long
     ): ResponseEntity<SingleResponse<UserResponse>>
 }
