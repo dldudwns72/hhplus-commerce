@@ -1,6 +1,8 @@
 package kr.hhplus.be.server.domain.user
 
 import jakarta.transaction.Transactional
+import org.springframework.dao.OptimisticLockingFailureException
+import org.springframework.orm.ObjectOptimisticLockingFailureException
 import org.springframework.stereotype.Service
 
 @Service
@@ -9,19 +11,41 @@ class UserService(
 ) {
 
     @Transactional
-    fun chargePoint(id: Long, point: Long): UserEntity {
+    fun chargePoint(id: Long, point: Long, maxRetry: Int = 3): UserEntity {
         val user = userRepository.findById(id) ?: throw IllegalArgumentException("유저를 찾을 수 없습니다.")
-        user.addPoint(point)
-        userRepository.updateUserBalance(id, user.balance)
-        return user
+        var retryCount = 0
+
+        while (retryCount < maxRetry) {
+            try {
+                user.addPoint(point)
+                return user
+            } catch (olfe: ObjectOptimisticLockingFailureException) {
+                retryCount++
+                if (retryCount >= maxRetry) {
+                    throw IllegalStateException("Failed to charge points after retry: $retryCount")
+                }
+            }
+        }
+        throw IllegalStateException("Unexpected error in chargePoint function")
     }
 
     @Transactional
-    fun usePoint(id: Long, point: Long): UserEntity {
+    fun usePoint(id: Long, point: Long, maxRetry: Int = 3): UserEntity {
         val user = userRepository.findById(id) ?: throw IllegalArgumentException("유저를 찾을 수 없습니다.")
-        user.usePoint(point)
-        userRepository.updateUserBalance(id, user.balance)
-        return user
+        var retryCount = 0
+
+        while (retryCount < maxRetry) {
+            try {
+                user.usePoint(point)
+                return user
+            } catch (olfe: OptimisticLockingFailureException) {
+                retryCount++
+                if (retryCount >= maxRetry) {
+                    throw IllegalStateException("Failed to charge points after retry: $retryCount")
+                }
+            }
+        }
+        throw IllegalStateException("Unexpected error")
     }
 
     fun getUserById(id: Long): UserEntity {
