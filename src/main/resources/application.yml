@@ -19,18 +19,28 @@ spring:
     generate-ddl: false
     show-sql: false
     hibernate:
-      ddl-auto: update # none, create, create-drop, update, validate
+      ddl-auto: create-drop # none, create, create-drop, update, validate
     defer-datasource-initialization: true # 아래 sql init 시점에
     properties:
       hibernate.timezone.default_storage: NORMALIZE_UTC
       hibernate.jdbc.time_zone: UTC
       # hibernate.dialect: org.hibernate.dialect.MySQLDialect
-  sql: # 재영님 꿀팁
+  sql:
     init:
-      mode: always
+      mode: always # never, always, embedded
       data-locations:
-        - classpath:sql/init.sql # classpath 는 소스코드 기준?!
-#
+        - classpath:sql/init.sql
+
+
+management:
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    sampling:
+      probability: 0.1 # 100% 샘플링
+
+
 
 logging:
   level:

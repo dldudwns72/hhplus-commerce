@@ -55,6 +55,16 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 
+	// Srping Cloud Sleuth
+	implementation("io.micrometer:micrometer-tracing-bridge-brave")
+	// Zipkin 라이브러리
+	// implementation("io.zipkin.reporter2:zipkin-reporter-brave")
+
+
+	// Spring 2.x 에서 사용
+	// implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
+	// implementation("org.springframework.cloud:spring-cloud-starter-zipkin:2.2.8.RELEASE")
+
 	// Swagger
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 
