@@ -20,7 +20,7 @@ class OrderService(
             try {
                 product.first.productInventory.decreaseInventoryCount()
             } catch (e: OptimisticLockingFailureException) {
-                throw IllegalStateException("상품 재고 업데이트에 실패하였습니다.")
+                throw IllegalStateException("상품 재고 업데이트에 실패하였습니다. 상품 ID: ${product.first.id}")
             }
             OrderProductEntity(
                 quantity = product.second,
