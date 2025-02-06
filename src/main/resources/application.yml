@@ -30,6 +30,12 @@ spring:
       mode: always # never, always, embedded
       data-locations:
         - classpath:sql/init.sql
+  data:
+    redis:
+      host: localhost
+      port: 6379               # Redis 서버 포트 (기본값: 6379)
+#      url: jdbc:redis://유저네임:비밀번호@호스트 이름:포트번호
+      password: null
 
 
 management:

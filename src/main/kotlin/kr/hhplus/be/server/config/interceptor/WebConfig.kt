@@ -12,5 +12,6 @@ class WebConfig(
         registry.addInterceptor(webInterceptor)
             .addPathPatterns("/api/**")  // 특정 경로에만 적용
             .excludePathPatterns("/api/auth/**")  // 제외 경로
+            .excludePathPatterns("/api/v1/product/**")  // 제외 경로
     }
 }
