@@ -33,9 +33,8 @@ class ProductRepositoryImpl(
 
     override fun findPopularProduct(
         startDate: LocalDateTime,
-        endDate: LocalDateTime,
-        pageable: Pageable
-    ): Page<PopularProductResult> {
-        return productJpaRepository.findPopularProducts(startDate, endDate, pageable)
+        endDate: LocalDateTime
+    ): List<PopularProductResult> {
+        return productJpaRepository.findPopularProducts(startDate, endDate)
     }
 }

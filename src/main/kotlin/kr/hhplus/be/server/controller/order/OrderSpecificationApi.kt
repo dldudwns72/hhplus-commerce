@@ -35,6 +35,6 @@ interface OrderSpecificationApi {
     )
     fun postOrder(
         userId: Long,
-        @RequestBody orderRequest: OrderRequest
+        orderRequest: OrderRequest
     ): ResponseEntity<SingleResponse<OrderResponse>>
 }

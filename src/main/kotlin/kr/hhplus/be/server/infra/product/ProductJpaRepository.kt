@@ -41,9 +41,8 @@ interface ProductJpaRepository : JpaRepository<ProductEntity, Long> {
     )
     fun findPopularProducts(
         startDate: LocalDateTime,
-        endDate: LocalDateTime,
-        pageable: Pageable
-    ): Page<PopularProductResult>
+        endDate: LocalDateTime
+    ): List<PopularProductResult>
 
 
 }
