@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.controller.product
 
+import kr.hhplus.be.server.controller.common.MultiResponse
 import kr.hhplus.be.server.controller.common.PageResponse
 import kr.hhplus.be.server.controller.common.SingleResponse
 import kr.hhplus.be.server.controller.product.dto.PopularProductResponse
@@ -43,12 +44,11 @@ class ProductController(
     @GetMapping("/popular")
     override fun getPopularProduct(
         @RequestParam startDate: LocalDateTime,
-        @RequestParam endDate: LocalDateTime,
-        pageable: Pageable,
-    ): ResponseEntity<PageResponse<PopularProductResponse>> {
+        @RequestParam endDate: LocalDateTime
+    ): ResponseEntity<MultiResponse<PopularProductResponse>> {
         return ResponseEntity(
-            PageResponse.execute {
-                productService.getPopularProduct(startDate, endDate, pageable)
+            MultiResponse.execute {
+                productService.getPopularProduct(startDate, endDate)
             }, HttpStatus.OK
         )
     }

@@ -4,13 +4,16 @@ import jakarta.transaction.Transactional
 import kr.hhplus.be.server.controller.product.dto.*
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.redis.core.RedisTemplate
+import org.springframework.data.redis.core.ZSetOperations
 import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
 class ProductService(
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
+    private val redisTemplate: RedisTemplate<String, String>
 ) {
     fun getProduct(productId: Long): ProductEntity {
         return productRepository.findProductById(productId)
@@ -29,11 +32,32 @@ class ProductService(
 
     fun getPopularProduct(
         startDate: LocalDateTime,
-        endDate: LocalDateTime,
-        @PageableDefault(size = 5) pageable: Pageable
-    ): Page<PopularProductResponse> {
-        return productRepository.findPopularProduct(startDate, endDate, pageable).map {
-            it.toPopularProductResponse()
+        endDate: LocalDateTime
+    ): List<PopularProductResponse> {
+        val popularProducts = redisTemplate.opsForZSet().reverseRangeWithScores(
+            "popular_products",
+            0,
+            4
+        )?.map {
+            Pair(it.value!!.toLong(), it.score ?: 0.0)
+        } ?: emptyList()
+
+        return runCatching {
+            popularProducts.mapNotNull { (productId, orderCount) ->
+                productRepository.findProductById(productId)?.let { product ->
+                    PopularProductResult(
+                        id = product.id,
+                        name = product.name,
+                        price = product.price,
+                        inventory = product.productInventory.inventory,
+                        orderCount = orderCount.toLong()
+                    )
+                }?.toPopularProductResponse()
+            }
+        }.getOrElse {
+            productRepository.findPopularProduct(startDate, endDate).map {
+                it.toPopularProductResponse()
+            }
         }
     }
 

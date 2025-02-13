@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
+import kr.hhplus.be.server.controller.common.MultiResponse
 import kr.hhplus.be.server.controller.common.PageResponse
 import kr.hhplus.be.server.controller.common.SingleResponse
 import kr.hhplus.be.server.controller.coupon.dto.response.CouponResponse
@@ -79,7 +80,6 @@ interface ProductSpecificationApi {
     )
     fun getPopularProduct(
         @RequestParam startDate: LocalDateTime,
-        @RequestParam endDate: LocalDateTime,
-        pageable: Pageable,
-    ): ResponseEntity<PageResponse<PopularProductResponse>>
+        @RequestParam endDate: LocalDateTime
+    ): ResponseEntity<MultiResponse<PopularProductResponse>>
 }

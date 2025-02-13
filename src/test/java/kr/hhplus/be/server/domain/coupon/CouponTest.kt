@@ -2,11 +2,7 @@ package kr.hhplus.be.server.domain.coupon
 
 import kr.hhplus.be.server.application.coupon.CouponFacade
 import kr.hhplus.be.server.application.coupon.CouponService
-import kr.hhplus.be.server.application.coupon.toCouponUserResult
-import kr.hhplus.be.server.domain.coupon.CouponEntity
-import kr.hhplus.be.server.domain.coupon.CouponUserEntity
-import kr.hhplus.be.server.domain.order.OrderEntity
-import kr.hhplus.be.server.domain.product.ProductEntity
+
 import kr.hhplus.be.server.domain.user.UserEntity
 import kr.hhplus.be.server.domain.user.UserService
 import org.junit.jupiter.api.Assertions
@@ -41,6 +37,7 @@ class CouponTest {
         val coupon = CouponEntity(
             name = "쿠폰1",
             capacity = 100,
+            maxCapacity = 100,
             discountType = CouponDiscountType.AMOUNT,
             discountValue = 1000
         )
@@ -60,6 +57,7 @@ class CouponTest {
         val coupon = CouponEntity(
             name = "쿠폰1",
             capacity = 0,
+            maxCapacity = 100,
             discountType = CouponDiscountType.AMOUNT,
             discountValue = 1000
         )
@@ -85,6 +83,7 @@ class CouponTest {
             id = 1L,
             name = "COUPON",
             capacity = 100,
+            maxCapacity = 100,
             discountType = CouponDiscountType.AMOUNT,
             discountValue = 1000
         )
@@ -110,6 +109,7 @@ class CouponTest {
         val coupon = CouponEntity(
             name = "쿠폰1",
             capacity = 0,
+            maxCapacity = 100,
             discountType = CouponDiscountType.AMOUNT,
             discountValue = 1000
         )
@@ -132,6 +132,7 @@ class CouponTest {
         val coupon = CouponEntity(
             name = "쿠폰1",
             capacity = 0,
+            maxCapacity = 100,
             discountType = CouponDiscountType.AMOUNT,
             discountValue = 1000
         )

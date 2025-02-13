@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS `users`
     `balance`    bigint       NOT NULL,
     `created_at` datetime(6)  NOT NULL,
     `updated_at` datetime(6)  NOT NULL,
+    `version`    int          NOT NULL default 0,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -38,6 +39,7 @@ CREATE TABLE IF NOT EXISTS `product_inventory`
     `id`         bigint NOT NULL AUTO_INCREMENT,
     `inventory`  int    NOT NULL,
     `product_id` bigint NOT NULL,
+    `version` INT NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

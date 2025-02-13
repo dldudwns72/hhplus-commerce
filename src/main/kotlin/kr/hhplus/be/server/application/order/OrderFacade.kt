@@ -12,6 +12,7 @@ import kr.hhplus.be.server.domain.product.ProductEntity
 import kr.hhplus.be.server.domain.product.ProductService
 import kr.hhplus.be.server.domain.user.UserEntity
 import kr.hhplus.be.server.domain.user.UserService
+import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
 
 @Service
@@ -21,6 +22,7 @@ class OrderFacade(
     private val couponService: CouponService,
     private val userService: UserService,
     private val paymentService: PaymentService,
+    private val redisTemplate: RedisTemplate<String, String>
 ) {
     @Transactional
     fun order(userId: Long, request: OrderRequest): OrderResult {
@@ -42,11 +44,22 @@ class OrderFacade(
         val totalAmount: Long = order.orderProducts.sumOf {
             it.product.price * it.quantity
         }
+        user.usePoint(totalAmount)
 
         val payment = paymentService.pay(order, totalAmount)
 
         if (paymentService.isSuccess(payment)) {
             order.complete(totalAmount)
+            products.forEach { product ->
+                val zCard = redisTemplate.opsForZSet().zCard("popular_products")
+                if (zCard != null && zCard > 0) {
+                    redisTemplate.opsForZSet()
+                        .incrementScore("popular_products", product.first.id.toString(), product.second.toDouble())
+                } else {
+                    redisTemplate.opsForZSet()
+                        .add("popular_products", product.first.id.toString(), product.second.toDouble())
+                }
+            }
         }
         return order.toResult()
     }

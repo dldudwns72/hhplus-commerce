@@ -5,15 +5,16 @@ CREATE TABLE IF NOT EXISTS `users`
     `balance`    bigint       NOT NULL,
     `created_at` datetime(6)  NOT NULL,
     `updated_at` datetime(6)  NOT NULL,
+    `version`    int          NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
-INSERT INTO users (name, balance, created_at, updated_at)
-VALUES ('User1', 0, FROM_UNIXTIME(UNIX_TIMESTAMP()), FROM_UNIXTIME(UNIX_TIMESTAMP())),
-       ('User2', 100, FROM_UNIXTIME(UNIX_TIMESTAMP()), FROM_UNIXTIME(UNIX_TIMESTAMP())),
-       ('User3', 200, FROM_UNIXTIME(UNIX_TIMESTAMP()), FROM_UNIXTIME(UNIX_TIMESTAMP()));
+INSERT INTO users (name, balance, created_at, updated_at, version)
+VALUES ('User1', 0, FROM_UNIXTIME(UNIX_TIMESTAMP()), FROM_UNIXTIME(UNIX_TIMESTAMP()), 0),
+       ('User2', 100, FROM_UNIXTIME(UNIX_TIMESTAMP()), FROM_UNIXTIME(UNIX_TIMESTAMP()), 0),
+       ('User3', 200, FROM_UNIXTIME(UNIX_TIMESTAMP()), FROM_UNIXTIME(UNIX_TIMESTAMP()), 0);
 
 
 CREATE TABLE IF NOT EXISTS `product`

@@ -15,9 +15,9 @@ class UserController(
     private val userService: UserService
 ) : UserSpecificationApi {
 
-    @PostMapping("/{userId}/balance")
+    @PostMapping("/balance")
     override fun chargeBalance(
-        @PathVariable userId: Long,
+        @RequestHeader("user-id") userId: Long,
         @RequestBody request: BalanceRequest
     ): ResponseEntity<SingleResponse<UserResponse>> {
         return ResponseEntity(
@@ -28,9 +28,9 @@ class UserController(
         )
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping
     override fun gatUserBalance(
-        @PathVariable userId: Long
+        @RequestHeader("user-id") userId: Long
     ): ResponseEntity<SingleResponse<UserResponse>> {
         return ResponseEntity(
             SingleResponse.execute {

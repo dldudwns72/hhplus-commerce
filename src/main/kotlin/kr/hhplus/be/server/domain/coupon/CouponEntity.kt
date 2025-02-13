@@ -13,6 +13,8 @@ class CouponEntity(
     var name: String,
     @Column(name = "capacity", nullable = false)
     var capacity: Int,
+    @Column(name = "max_capacity", nullable = false)
+    var maxCapacity: Int,
     @Enumerated(EnumType.STRING)
     @Column(name = "discount_type", nullable = false)
     val discountType: CouponDiscountType,

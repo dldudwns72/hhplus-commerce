@@ -10,14 +10,6 @@ class UserRepositoryImpl(
     private val userJpaRepository: UserJpaRepository
 ) : UserRepository {
 
-    override fun saveUserBalance(userEntity: UserEntity) {
-        userJpaRepository.save(userEntity)
-    }
-
-    override fun updateUserBalance(userId: Long, totalBalance: Long) {
-        userJpaRepository.saveUserBalance(userId, totalBalance)
-    }
-
     override fun findBalanceById(id: Long): Int {
         return userJpaRepository.findBalanceById(id)
     }
@@ -30,4 +22,7 @@ class UserRepositoryImpl(
         return userJpaRepository.save(user)
     }
 
+    override fun saveAndFlush(user: UserEntity): UserEntity {
+        return userJpaRepository.saveAndFlush(user)
+    }
 }

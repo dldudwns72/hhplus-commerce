@@ -30,7 +30,7 @@ interface CouponSpecificationApi {
         ]
     )
     fun issueCoupon(
-        @PathVariable couponId: Long,
-        @PathVariable userId: Long
+        couponId: Long,
+        userId: Long
     ): ResponseEntity<SingleResponse<CouponUserResponse>>
 }
