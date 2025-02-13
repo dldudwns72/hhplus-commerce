@@ -12,11 +12,11 @@ class OrderEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0L,
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, foreignKey = ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     val user: UserEntity,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "coupon_id", nullable = true)
+    @JoinColumn(name = "coupon_id", nullable = true, foreignKey = ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     val coupon: CouponEntity? = null,
 
     // 결제 총액?
