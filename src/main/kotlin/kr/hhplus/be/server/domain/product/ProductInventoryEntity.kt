@@ -13,7 +13,7 @@ class ProductInventoryEntity(
     var id: Long = 0L,
     var inventory: Int,
     @OneToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id", nullable = false, foreignKey = ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     var product: ProductEntity? = null,
     @Version
     @ColumnDefault("0")
