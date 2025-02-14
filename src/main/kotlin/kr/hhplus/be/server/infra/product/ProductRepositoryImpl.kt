@@ -37,4 +37,8 @@ class ProductRepositoryImpl(
     ): List<PopularProductResult> {
         return productJpaRepository.findPopularProducts(startDate, endDate, limitCount)
     }
+
+    override fun save(product: ProductEntity): ProductEntity? {
+        return productJpaRepository.save(product)
+    }
 }

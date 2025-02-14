@@ -24,4 +24,8 @@ class ProductInventoryEntity(
         if (inventory == 0) throw ProductException("상품 재고가 존재하지 않습니다.")
         inventory - 1
     }
+
+    fun increaseInventoryCount(count: Int) {
+        inventory + count
+    }
 }

@@ -14,4 +14,6 @@ interface ProductRepository {
         endDate: LocalDateTime,
         limitCount: Int
     ): List<PopularProductResult>
+
+    fun save(product: ProductEntity): ProductEntity?
 }

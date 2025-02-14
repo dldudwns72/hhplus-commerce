@@ -30,8 +30,7 @@ class OrderEntity(
     var orderProducts: MutableList<OrderProductEntity> = mutableListOf()
 ) : BaseEntity() {
 
-    fun complete(totalAmount: Long) {
-        this.totalAmount = totalAmount
+    fun complete() {
         status = OrderStatus.COMPLETED
     }
 }
