@@ -11,6 +11,9 @@ interface ProductRepository {
     fun findAll(pageable: Pageable): Page<ProductEntity>
     fun findPopularProduct(
         startDate: LocalDateTime,
-        endDate: LocalDateTime
+        endDate: LocalDateTime,
+        limitCount: Int
     ): List<PopularProductResult>
+
+    fun save(product: ProductEntity): ProductEntity?
 }

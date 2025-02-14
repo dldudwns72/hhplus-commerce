@@ -28,20 +28,23 @@ interface ProductJpaRepository : JpaRepository<ProductEntity, Long> {
         p.name,
         p.price,
         pi.inventory,
-        count(op.id)
+        SUM(op.quantity)
     )
-    from ProductEntity p
+    from OrderEntity o
+    INNER JOIN OrderProductEntity op ON o.id = op.order.id
+    INNER JOIN ProductEntity p ON op.product.id = p.id
     INNER JOIN ProductInventoryEntity pi ON p.id = pi.product.id
-    INNER JOIN OrderProductEntity op ON op.product.id = p.id
-    INNER JOIN OrderEntity o ON o.id = op.order.id
     WHERE op.createdAt >= :startDate AND op.createdAt <= :endDate
     AND o.status = 'COMPLETED'
     GROUP BY p.id, pi.inventory
+    ORDER BY SUM(op.quantity) DESC
+    LIMIT :limitCount
 """
     )
     fun findPopularProducts(
         startDate: LocalDateTime,
-        endDate: LocalDateTime
+        endDate: LocalDateTime,
+        limitCount: Int
     ): List<PopularProductResult>
 
 
