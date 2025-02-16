@@ -3,7 +3,6 @@ package kr.hhplus.be.server.infra.product
 import kr.hhplus.be.server.domain.product.PopularProductResult
 import kr.hhplus.be.server.domain.product.ProductEntity
 import kr.hhplus.be.server.domain.product.ProductRepository
-import kr.hhplus.be.server.domain.product.ProductInfo
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
@@ -33,8 +32,13 @@ class ProductRepositoryImpl(
 
     override fun findPopularProduct(
         startDate: LocalDateTime,
-        endDate: LocalDateTime
+        endDate: LocalDateTime,
+        limitCount: Int
     ): List<PopularProductResult> {
-        return productJpaRepository.findPopularProducts(startDate, endDate)
+        return productJpaRepository.findPopularProducts(startDate, endDate, limitCount)
+    }
+
+    override fun save(product: ProductEntity): ProductEntity? {
+        return productJpaRepository.save(product)
     }
 }

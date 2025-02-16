@@ -5,8 +5,6 @@ import kr.hhplus.be.server.controller.product.dto.*
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.data.redis.core.ZSetOperations
-import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -32,12 +30,13 @@ class ProductService(
 
     fun getPopularProduct(
         startDate: LocalDateTime,
-        endDate: LocalDateTime
+        endDate: LocalDateTime,
     ): List<PopularProductResponse> {
+        val limitCount = 4
         val popularProducts = redisTemplate.opsForZSet().reverseRangeWithScores(
             "popular_products",
             0,
-            4
+            limitCount.toLong()
         )?.map {
             Pair(it.value!!.toLong(), it.score ?: 0.0)
         } ?: emptyList()
@@ -55,7 +54,7 @@ class ProductService(
                 }?.toPopularProductResponse()
             }
         }.getOrElse {
-            productRepository.findPopularProduct(startDate, endDate).map {
+            productRepository.findPopularProduct(startDate, endDate, limitCount).map {
                 it.toPopularProductResponse()
             }
         }

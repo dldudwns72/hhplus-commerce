@@ -16,12 +16,12 @@ class OrderProductEntity(
 
     // 1개의 주문에 order_product 가 N개 생성될 수 있으니깐 1 order: N order_product -> order_product:Many order:One => ManyToOne
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false, foreignKey = ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     var order: OrderEntity,
 
     // 1개의 상품에 order_product 가 N개 생성될 수 있으니깐 1 product: N order_product -> order_product:Many product:One => ManyToOne
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id", nullable = false, foreignKey = ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     var product: ProductEntity
 ) : BaseEntity() {
 
