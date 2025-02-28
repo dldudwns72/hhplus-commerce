@@ -14,5 +14,88 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
       #- ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  redis:
+    image: redis:7.4.2
+    ports:
+      - "6379:6379"
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  k6-master:
+    image: grafana/k6
+    container_name: k6-master
+    volumes:
+      - ./scripts:/scripts
+    command: [ "run", "/scripts/popular_product_test.js" ]
+    depends_on:
+      - influxdb
+    networks:
+      - monitoring
+
+  k6-worker:
+    image: grafana/k6
+    container_name: k6-worker
+    volumes:
+      - ./scripts:/scripts
+    command: [ "run", "/scripts/popular_product_test.js" ]
+    depends_on:
+      - influxdb
+    networks:
+      - monitoring
+
+  influxdb:
+    image: influxdb:1.8
+    container_name: influxdb
+    restart: always
+    ports:
+      - "8086:8086"
+    environment:
+      - INFLUXDB_DB=k6
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin123
+#    volumes:
+#      - influxdb_data:/var/lib/influxdb
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+#    volumes:
+#      - grafana_data:/var/lib/grafana
+    depends_on:
+      - influxdb
+    networks:
+      - monitoring
+
+networks:
+  default:
+    driver: bridge
+  monitoring:
+    driver: bridge
+
 volumes:
   mysql-data: # named volume이 컨테이너에서 사용될 수 있게 했습니다.
